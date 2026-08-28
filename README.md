@@ -1,90 +1,117 @@
-# 🇻🇳 ViLegalNLI: Vietnamese Legal Natural Language Inference Dataset
+<div align="center">
+  <img src=".github/assets/readme-banner.svg" width="100%" alt="ViLegalNLI Vietnamese Legal Natural Language Inference Dataset" />
+  <br /><br />
 
-**Course project:** Natural Language Processing for Data Science  
-**Institution:** University of Information Technology — VNU-HCM
+  ![Vietnamese NLP](https://img.shields.io/badge/Vietnamese_NLP-0f172a?style=for-the-badge&logo=huggingface&logoColor=FFD21E)
+  ![Dataset](https://img.shields.io/badge/Dataset-9,696_Pairs-4f46e5?style=for-the-badge)
+  ![Labels](https://img.shields.io/badge/Labels-3_Balanced-0f172a?style=for-the-badge&logo=databricks&logoColor=38bdf8)
+  ![Format](https://img.shields.io/badge/Format-XLSX-0f172a?style=for-the-badge&logo=microsoftexcel&logoColor=217346)
+</div>
 
-ViLegalNLI is a Vietnamese legal-domain Natural Language Inference (NLI) dataset developed to support research on entailment, neutrality, and contradiction in low-resource, domain-specific language understanding.
+## Overview
 
-## Dataset Summary
+**ViLegalNLI** is a Vietnamese legal-domain Natural Language Inference dataset for research on entailment, neutrality, and contradiction in low-resource, domain-specific language understanding.
+
+The dataset was developed as a Natural Language Processing for Data Science course project at the **University of Information Technology - VNU-HCM**.
+
+<div align="center">
+  <a href="dataset/ViLegalNLI.xlsx">
+    <img src="https://img.shields.io/badge/Download_Dataset-217346?style=for-the-badge&logo=microsoftexcel&logoColor=white" alt="Download ViLegalNLI" />
+  </a>
+</div>
+
+## Dataset Card
+
+| Premise-hypothesis pairs | Source documents | Legal aspects | Labels | Source websites |
+|---:|---:|---:|---:|---:|
+| **9,696** | **3,232** | **26** | **3** | **3** |
 
 | Property | Value |
-|---|---:|
-| Premise–hypothesis pairs | 9,696 |
-| Source legal documents | 3,232 |
-| Legal aspects | 26 |
-| Labels | 3 |
-| Entailment examples | 3,232 |
-| Neutral examples | 3,232 |
-| Contradiction examples | 3,232 |
-| Source websites | 3 |
+|---|---|
+| Language | Vietnamese |
+| Domain | Legal |
+| Task | Natural Language Inference |
+| Labels | Entailment, Neutral, Contradiction |
+| Distribution | 3,232 examples per label |
 | File format | XLSX |
+| Official split | Not provided |
 
-The workbook currently contains one sheet named `Sheet1`. It does not provide an official train/dev/test split.
+## Label Distribution
 
-## Label Mapping
+| Label ID | Relation | Examples | Share |
+|---:|---|---:|---:|
+| `0` | Entailment | 3,232 | 33.3% |
+| `1` | Neutral | 3,232 | 33.3% |
+| `2` | Contradiction | 3,232 | 33.3% |
 
-| Label | Meaning |
-|---:|---|
-| `0` | Entailment |
-| `1` | Neutral |
-| `2` | Contradiction |
-
-## Schema
+## Dataset Schema
 
 | Column | Description |
 |---|---|
 | `Hypothesis` | Statement whose relation to the premise is classified |
 | `Premise` | Relevant legal passage used for NLI |
-| `Text` | Longer source document context |
+| `Text` | Longer source-document context |
 | `Aspect` | Legal-domain category |
 | `Website` | Source website |
 | `Label` | Integer NLI label |
-| `List Evidence` | Evidence supporting the assigned relation, when applicable |
+| `List Evidence` | Evidence supporting the assigned relation, when available |
 | `Explanation` | Natural-language explanation of the label |
 | `File Path` | Historical collection path; not a portable identifier |
 | `Text Length` | Recorded source-text length |
 
 ## Source Distribution
 
-- `thuvienphapluat.vn`: 5,802 examples
-- `vanban.chinhphu.vn`: 2,400 examples
-- `dulieuphapluat.vn`: 1,494 examples
+| Source | Examples | Share |
+|---|---:|---:|
+| `thuvienphapluat.vn` | 5,802 | 59.8% |
+| `vanban.chinhphu.vn` | 2,400 | 24.8% |
+| `dulieuphapluat.vn` | 1,494 | 15.4% |
 
-The dataset covers 26 aspects. The largest categories include public administration, other legal topics, public finance, investment, transportation, education, civil law, and construction/urban development.
+The 26 legal aspects include public administration, public finance, investment, transportation, education, civil law, construction, urban development, and other legal topics.
 
 ## Load the Dataset
+
+```bash
+pip install pandas openpyxl
+```
 
 ```python
 import pandas as pd
 
 df = pd.read_excel("dataset/ViLegalNLI.xlsx")
-print(df.shape)            # (9696, 10)
+
+print(df.shape)  # (9696, 10)
 print(df["Label"].value_counts().sort_index())
-```
-
-Install the required reader with:
-
-```bash
-pip install pandas openpyxl
 ```
 
 ## Data Quality Notes
 
 A direct audit of the published workbook found:
 
-- 13 rows with a missing `Hypothesis`
-- 24 rows with a missing `Premise`
-- 13 duplicated premise–hypothesis pairs
-- no fully duplicated rows
-- balanced label counts
+| Check | Result |
+|---|---:|
+| Missing `Hypothesis` | 13 rows |
+| Missing `Premise` | 24 rows |
+| Duplicated premise-hypothesis pairs | 13 rows |
+| Fully duplicated rows | 0 |
+| Label balance | Balanced |
 
-Users should define and document how these rows are handled. When creating data splits, group related examples by their source document to reduce leakage between training and evaluation sets.
+Users should explicitly document how missing and duplicated pairs are handled. When creating train, development, and test splits, group related examples by source document to reduce leakage.
 
-## Intended Use and Limitations
+## Intended Use
 
-ViLegalNLI is intended for academic research and model evaluation in Vietnamese legal NLP. It is not legal advice and should not be used as the sole basis for legal decisions.
+- Academic research in Vietnamese legal NLP
+- Natural Language Inference experiments
+- Domain adaptation and model evaluation
+- Data-quality and low-resource language research
 
-Legal language changes over time, source websites may contain copyrighted material, and automatically generated hypotheses or explanations may contain errors. Researchers should review source rights, dataset provenance, and applicable terms before redistribution or commercial use.
+## Limitations
+
+- ViLegalNLI is not legal advice and must not be used as the sole basis for legal decisions.
+- The workbook does not provide an official train/development/test split.
+- Legal language and source websites change over time.
+- Automatically generated hypotheses or explanations may contain errors.
+- Source text may be copyrighted; review provenance and terms before redistribution or commercial use.
 
 ## Repository Structure
 
@@ -105,7 +132,8 @@ ViLegalNLI-dataset/
 - Ho Nguyen Thien Vu
 - Duong Thi Hong Nhung
 
-**Instructor:** M.A. Huynh Van Tin
+**Instructor:** M.A. Huynh Van Tin  
+**Project completion:** 2024
 
 ## References
 
@@ -116,6 +144,4 @@ This project was informed by SNLI, XNLI, ViNLI, ViHealthNLI, ViFactCheck, PhoBER
 
 ## License and Citation
 
-No explicit dataset license has been published yet. Do not assume permission for redistribution or commercial use. For research-use questions or citation details, contact the repository maintainer through GitHub.
-
-**Project completion:** 2024
+No explicit dataset license has been published. Do not assume permission for unrestricted redistribution or commercial use. For research-use and citation questions, contact the repository maintainer through GitHub.
